@@ -1,0 +1,17 @@
+import Tkinter
+import ttk
+import winsound
+
+def ok_message_box(info_text, title_text):
+  popup = Tkinter.Tk()
+  popup.wm_title(title_text)
+  popup.minsize(width=default_width / 3, height=default_height / 3)
+  popup.wm_resizable(width=False, height=False)
+  label = ttk.Label(popup, text=info_text)
+  label.pack(side="top", pady=10)
+  stop_button = ttk.Button(popup, text='Ok', command = lambda:[f() for f in [popup.destroy, popup.quit]]) #It doesn't destroy window with 'quit'
+  stop_button.pack(side="bottom", pady=10)
+  winsound.PlaySound('SystemExclamation', winsound.SND_ALIAS)
+  popup.mainloop()
+
+ok_message_box('Info', 'Title')
