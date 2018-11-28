@@ -1,0 +1,53 @@
+from direct.showbase.ShowBase import ShowBase
+from direct.gui.DirectGui import *
+
+def some_command():
+  print 'Command executed'
+
+class GameMain(ShowBase):
+
+  def __init__(self):
+    ShowBase.__init__(self)
+    self.list_of_extra_arguments = []
+    self.list_of_label_items = ['Item 1', 'Item 2', 'Item 3', 'Item 4']
+    self.selected_item = 'Item 2'
+    self.xy_and_scale_list = [0.4, 0.4, 0.7] #X, Y, Scale
+    self.color_tuple = (128, 128, 128, 200) #Red, Green, Blue, Alpha
+    self.cur_combo_label = self.createComboLabel(self.list_of_label_items, self.selected_item, self.xy_and_scale_list, self.color_tuple) #Click sound is optional
+    self.cur_combo_label['command'] = some_command
+    self.cur_combo_label['extraArgs'] = self.list_of_extra_arguments
+
+  def createComboLabel(self, items_list, selected_item, pos_xy_scale, rgba_t, sound=None):
+    selected_index = 0
+    t_scale = float(pos_xy_scale[2]) / 10
+    label_items = []
+    for i in xrange(len(items_list)):
+      item_label = DirectLabel(text = items_list[i], text_scale = t_scale, frameColor = rgba_t)
+      label_items.append(item_label)
+      if items_list[i] == selected_item:
+        selected_index = i
+    combo_label = DirectScrolledList(
+        decButton_pos= (-0.31, 0, -0.01),
+        decButton_text = "<",
+        decButton_text_scale = 0.2,
+        decButton_borderWidth = (0.005, 0.005),
+        decButton_frameColor = rgba_t,
+        decButton_clickSound = sound,
+        incButton_pos= (0.29, 0, -0.01),
+        incButton_text = ">",
+        incButton_text_scale = 0.2,
+        incButton_borderWidth = (0.005, 0.005),
+        incButton_frameColor = rgba_t,
+        incButton_clickSound = sound,
+        pos = (pos_xy_scale[0], 0, pos_xy_scale[1]),
+        scale = pos_xy_scale[2],
+        items = label_items,
+        numItemsVisible = 1,
+        itemFrame_frameSize = (-0.25, 0.25, -0.035, 0.08),
+        itemFrame_frameColor = rgba_t,
+        )
+    combo_label.scrollTo(selected_index, True)
+    return combo_label
+
+app = GameMain()
+app.run()
